@@ -29,7 +29,7 @@ func (s PostStore) Post(id int) (bunko.Post, error) {
 func (s PostStore) PostsByThread(threadID int) ([]bunko.Post, error) {
 	var p []bunko.Post
 
-	if err := s.Get(&p, `SELECT * FROM posts WHERE thread_id = $1`, threadID); err != nil {
+	if err := s.Select(&p, `SELECT * FROM posts WHERE thread_id = $1`, threadID); err != nil {
 		return []bunko.Post{}, fmt.Errorf("error getting posts: %w", err)
 	}
 

@@ -29,7 +29,7 @@ func (s CommentStore) Comment(id int) (bunko.Comment, error) {
 func (s CommentStore) CommentsByPost(postID int) ([]bunko.Comment, error) {
 	var c []bunko.Comment
 
-	if err := s.Get(&c, `SELECT * FROM comments WHERE post_id= $1`, postID); err != nil {
+	if err := s.Select(&c, `SELECT * FROM comments WHERE post_id= $1`, postID); err != nil {
 		return []bunko.Comment{}, fmt.Errorf("error getting comments: %w", err)
 	}
 

@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"bunko"
+	"bunko/entities"
 	"fmt"
 	"github.com/jmoiron/sqlx"
 )
@@ -16,27 +16,27 @@ type ThreadStore struct {
 	*sqlx.DB
 }
 
-func (s ThreadStore) Thread(id int) (bunko.Thread, error) {
-	var t bunko.Thread
+func (s ThreadStore) Thread(id int) (entities.Thread, error) {
+	var t entities.Thread
 
 	if err := s.Get(&t, `SELECT * FROM threads WHERE id = $1`, id); err != nil {
-		return bunko.Thread{}, fmt.Errorf("error getting thread: %w", err)
+		return entities.Thread{}, fmt.Errorf("error getting thread: %w", err)
 	}
 
 	return t, nil
 }
 
-func (s ThreadStore) Threads() ([]bunko.Thread, error) {
-	var t []bunko.Thread
+func (s ThreadStore) Threads() ([]entities.Thread, error) {
+	var t []entities.Thread
 
 	if err := s.Select(&t, `SELECT * FROM threads`); err != nil {
-		return []bunko.Thread{}, fmt.Errorf("error getting threads: %w", err)
+		return []entities.Thread{}, fmt.Errorf("error getting threads: %w", err)
 	}
 
 	return t, nil
 }
 
-func (s ThreadStore) CreateThread(t *bunko.Thread) error {
+func (s ThreadStore) CreateThread(t *entities.Thread) error {
 	if err := s.Get(t, "INSERT INTO  threads(title, description) VALUES ($1, $2) RETURNING *", t.Title, t.Description); err != nil {
 		return fmt.Errorf("error create thread: %w", err)
 	}
@@ -44,7 +44,7 @@ func (s ThreadStore) CreateThread(t *bunko.Thread) error {
 	return nil
 }
 
-func (s ThreadStore) UpdateThread(t *bunko.Thread) error {
+func (s ThreadStore) UpdateThread(t *entities.Thread) error {
 	if err := s.Get(t, "UPDATE threads SET title = $1, description = $2 WHERE  id = $3", t.Title, t.Description, t.ID); err != nil {
 		return fmt.Errorf("error update thread: %w", err)
 	}

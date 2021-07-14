@@ -1,13 +1,13 @@
 package web
 
 import (
-	"bunko"
+	"bunko/entities"
 	"encoding/json"
 	"github.com/go-chi/chi"
 	"net/http"
 )
 
-func NewHandler(store bunko.Store) *Handler {
+func NewHandler(store entities.Store) *Handler {
 	h := &Handler{
 		Mux:   chi.NewMux(),
 		store: store,
@@ -20,7 +20,7 @@ func NewHandler(store bunko.Store) *Handler {
 
 type Handler struct {
 	*chi.Mux
-	store bunko.Store
+	store entities.Store
 }
 
 func (h *Handler) ThreadList() http.HandlerFunc {
